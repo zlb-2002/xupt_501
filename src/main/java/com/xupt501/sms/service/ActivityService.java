@@ -2,11 +2,9 @@ package com.xupt501.sms.service;
 
 import com.github.pagehelper.Page;
 import com.xupt501.sms.domain.Activity;
-import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-@Service
 public interface ActivityService {
 
     public List<Activity> findAll();
@@ -21,4 +19,5 @@ public interface ActivityService {
 
     public Boolean del(List<Integer> ids);
 
+    Boolean updateStatus(String status, Integer id);
 }
