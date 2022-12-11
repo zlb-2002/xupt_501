@@ -32,8 +32,16 @@ public class ActivityImpl implements ActivityService {
         if(searchMap != null){
             Example.Criteria criteria = example.createCriteria();
 
-            if(StringUtil.isNotEmpty(searchMap.get("name"))){
-                criteria.andLike("name", "%"+ searchMap.get("name") +"%");
+            if(StringUtil.isNotEmpty(searchMap.get("startTime"))){
+                criteria.andGreaterThanOrEqualTo("startTime",searchMap.get("startTime"));
+            }
+            if(StringUtil.isNotEmpty(searchMap.get("endTime"))){
+                criteria.andLessThanOrEqualTo("startTime",searchMap.get("endTime"));
+                criteria.andLessThanOrEqualTo("startTime",searchMap.get("endTime"));
+            }
+
+            if(StringUtil.isNotEmpty(searchMap.get("title"))){
+                criteria.andLike("title", "%"+ searchMap.get("title") +"%");
             }
             if(StringUtil.isNotEmpty(searchMap.get("pageNum"))){
                 pageNum =  Integer.parseInt(searchMap.get("pageNum"));

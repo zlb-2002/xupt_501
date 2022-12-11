@@ -17,189 +17,161 @@
     <style>
         .imgs{display: none;}
     </style>
-
+    <!--百度编辑器-->
+    <script src="ueditor/ueditor.config.js"></script>
+    <script src="ueditor/ueditor.all.min.js"></script>
+    <script src="ueditor/lang/zh-cn/zh-cn.js"></script>
+    <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
 
-<div class="x-body">
-    <form class="layui-form layui-form-pane" action="" id="add">
-        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+<div id="app">
+    <div class="x-nav">
+            <span class="layui-breadcrumb">
+              <a><cite>首页</cite></a>
+              <a><cite>服务管理</cite></a>
+              <a><cite>{{title}}</cite></a>
+            </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
+    </div>
+    <div class="x-body">
+        <el-form :model="complain" :rules="rules" ref="complainFormRef" label-width="120px" class="demo-ruleForm">
+            <el-form-item label="投诉人员" prop="name">
+                <el-input v-model="complain.ownerName"></el-input>
+            </el-form-item>
+            <el-form-item label="投诉名称" prop="description">
+                <el-input v-model="complain.description"></el-input>
+            </el-form-item>
+            <el-form-item label="投诉事由" prop="reason">
+                <el-input v-model="complain.reason"></el-input>
+            </el-form-item>
+            </el-form-item>
+            <el-form-item label="状态" prop="status">
+                <el-radio-group v-model="complain.status">
+                    <el-radio label="0">不匿名</el-radio>
+                    <el-radio label="1">匿名</el-radio>
+                </el-radio-group>
+            </el-form-item>
 
-
-            <div class="layui-tab-content" >
-                <div class="layui-tab-item layui-show">
-                    <input type="hidden" name="id" value="">
-
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            <span class='x-red'>*</span>所属小区
-                        </label>
-                        <div class="layui-input-block">
-                            <select name="community_id" id="community_id">
-
-                                <option value="0">---请选择小区---</option>
-                                <option value="1" >东湖小区</option>
-                                <option value="2" >金华万府</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            <span class='x-red'>*</span>投诉人员
-                        </label>
-                        <div class="layui-input-block">
-                            <input type="text" name="uasername" autocomplete="off" placeholder="空制在80个汉字，160个字符以内"
-                                   class="layui-input" disabled="disabled" value="">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            <span class='x-red'>*</span>投诉名称
-                        </label>
-                        <div class="layui-input-block">
-                            <input type="text" name="complaint_name" autocomplete="off" placeholder="空制在80个汉字，160个字符以内"
-                                   class="layui-input" value="">
-                        </div>
-                    </div>
-
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            <span class='x-red'>*</span>状态
-                        </label>
-                        <div class="layui-input-block">
-                            <input type="radio" name="status" value="1" title="匿名" >
-                            <div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon layui-anim-scaleSpring"></i>
-                                <div>匿名</div>
-                            </div>
-                            <input type="radio" name="status" value="0" title="不匿名" checked="checked">
-                            <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i>
-                                <div>不匿名</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="layui-form-item layui-form-text">
-                        <label class="layui-form-label">
-                            <span class='x-red'>*</span>投诉事由
-                        </label>
-                        <div class="layui-input-block">
-                            <textarea placeholder="请输入内容" name="desc" class="layui-textarea"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="layui-form-item">
-                        <button class="layui-btn" type="button" lay-filter="add" lay-submit="">
-                            保存
-                        </button>
-                    </div>
-                    <!--</form>-->
-                    <div style="height:100px;"></div>
-                </div>
-
-
-
-            </div>
-
-        </div>
-    </form>
+            <el-form-item>
+                <el-button type="primary" @click="save()" style="text-align: center">保存</el-button>
+                <el-button @click="clearAll()" style="text-align: center">重置</el-button>
+            </el-form-item>
+        </el-form>
+    </div>
 </div>
 <script src="lib/layui/layui.js" charset="utf-8"></script>
 <script src="js/x-layui.js" charset="utf-8"></script>
-<script src="js/jquery.min.js" charset="utf-8"></script>
+<!--导入Vue依赖包-->
+<script src="/js/vue.js" charset="utf-8"></script>
+<!-- 引入Element组件库 -->
+<script src="/js/index.js"></script>
+<!--导入Axios依赖包-->
+<script src="/js/axios.js" charset="utf-8"></script>
 
 <script>
-    $(function () {
-        var username="xiyuan";
-        //var username="惜缘";
-        $("input[name='uasername']").val(username);
-    })
-</script>
-<script>
-    layui.use(['laydate','element','layer','form'], function(){
-        $ = layui.jquery;//jquery
-        lement = layui.element();//面包导航
-        layer = layui.layer;//弹出层
-        form = layui.form();
-        laydate = layui.laydate;//日期插件
-        okLoading.close($);
-        form.render();
+    var app = new Vue({
+        el:"#app",
+        data:{
+            title:"添加投诉",
+            complain:{thumbnail:"",id:""},
+            fileList:[],
 
+            rules: {
+                name: [
+                    { required: false, message: '请输入投诉人员', trigger: 'blur' }
+                ],
+                description: [
+                    { required: true, message: '请输入投诉名称', trigger: 'blur' }
+                ],
+                reason: [
+                    { required: true, message: '请输入投诉是由', trigger: 'blur' }
+                ],
+                status:[
+                    { required: true, message: '请选择小区状态', trigger: 'change' }
+                ]
+            },
+        },
+        methods:{
 
-
-        //监听提交
-        form.on('submit(add)', function(data){
-
-            var uasername=$("input[name='uasername']").val();
-            var complaint_name=$("input[name='complaint_name']").val();
-
-            var community_id=$('#community_id option:selected') .val();//所属栏目ID
-            if(community_id==""){
-                layer.msg('所属小区不能为空',{icon:5,time:2000});return false;
-            }
-            if(uasername==""){
-                layer.msg('投诉人员不能为空',{icon:5,time:2000});return false;
-            }
-            if(complaint_name==""){
-                layer.msg('投诉名称不能为空',{icon:5,time:2000});return false;
-            }
-            var data=data.field;
-            $.ajax({
-                type:"post",
-                url:"xxx",
-                data:data,
-                dataType:"json",
-                success:function(data){
-                    if(data.status==1)
-                    {
-                        layer.msg(data.info, {icon: 6,time:2000},function () {
-                            window.parent.location.reload();
-                            var index = parent.layer.getFrameIndex(window.name);
-                            parent.layer.close(index);
+            findById(){
+                axios.get("/complaint/findById?id="+this.complain.id).then((res)=>{
+                    this.complain = res.data.data;
+                    this.fileList.push({url:"http://localhost/estate"+this.complain.thumbnail});
+                });
+            },
+            handleSuccess(response, file, fileList){
+                this.complain.thumbnail=response.data;
+            },
+            handleRemove() {
+                axios.get("/estate/delfile?fileName="+this.complain.thumbnail).then((res)=>{
+                    app.complain.thumbnail="";
+                    if(res.data.flag){
+                        app.fileList=[];
+                        this.$message({
+                            message: '图片删除成功',
+                            type: 'success'
                         });
-                        return false;
-
                     }
-                    else{
-                        layer.msg(data.info,{icon:5,time:2000});return false;
-                    }
+                });
+            },
+            handlePreview(file) {
+                console.log(file);
+            },
+            handleExceed(files, fileList) {
+                this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+            },
+            //文件删除提示
+            beforeRemove(file, fileList) {
+                return this.$confirm(`确定移除 ${ file.name }？`);
+            },
+            //表达重置
+            clearAll() {
+                this.$refs.complainFormRef.resetFields();
+                if(this.fileList.length>0) {
+                    this.handleRemove();
                 }
-
-            });
-
-        });
-
-    })
-</script>
-<!--栏目缩略图上传-->
-<script>
-    function upload()
-    {
-        var formData = new FormData();
-        formData.append('images', $('#previewImg')[0].files[0]);
-        //console.log(formData);
-        layer.msg('图片上传中', {icon: 16});
-        $.ajax({
-            type:"post",
-            processData: false,
-            contentType: false,
-            url:"xxxx",
-            data:formData,
-            success:function(data){
-                if(data.status == 1){
-                    console.log(data.image_name);
-                    layer.closeAll('loading');
-                    //layer.msg(data.info,{icon:1,time:1000});
-                    $("#pimages").attr('src',data.image_name);
-                    $("#avatar").val(data.image_name);
-                    $(".imgs").show();
-                    return false;
+            },
+            save(){
+                var method = "";
+                if(this.complain.id != null){
+                    method = "update"
                 }else{
-                    layer.msg(data.info,{icon:2,time:1000});
+                    method = "add"
                 }
+                axios.post("/complaint/"+method,this.complain).then((res)=>{
+                    if(res.data.flag){
+                        this.$message({
+                            message: res.data.message,
+                            type: 'success'
+                        });
+                    }
+                });
+            },
+            imgUrl(){
+                return "http://localhost/estate"+app.complain.thumbnail;
+            },
+            getQueryString(name){
+                let reg = `(^|&)${name}=([^&]*)(&|$)`
+                let r = window.location.search.substr(1).match(reg);
+                if (r != null) return unescape(r[2]); return null;
             }
-        });
-    }
+        },
+        created:function(){
+            layui.use(['element','layer','form'], function(){
+                $ = layui.jquery;//jquery
+                lement = layui.element();//面包导航
+                layer = layui.layer;//弹出层
+                form = layui.form();
+                okLoading.close($);
+            });
+            this.complain.id = this.getQueryString("id");
+            if(this.complain.id != null && this.complain.id !== ''){
+                this.title="修改投诉";
+                this.findById();
+            }
+        }
+    });
 </script>
 
 </body>

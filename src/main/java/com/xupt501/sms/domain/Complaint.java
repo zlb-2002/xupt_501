@@ -2,10 +2,11 @@ package com.xupt501.sms.domain;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
-@Table(name = "tb-complaint")
-public class Complaint {
+@Table(name = "tb_complaint")
+public class Complaint implements Serializable {
 
     @Id
     private Integer id;

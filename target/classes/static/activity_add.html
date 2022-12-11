@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <title>
-        车位使用添加
+        活动添加
     </title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -21,252 +20,203 @@
     <script src="ueditor/ueditor.config.js"></script>
     <script src="ueditor/ueditor.all.min.js"></script>
     <script src="ueditor/lang/zh-cn/zh-cn.js"></script>
+    <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
 
-<div class="x-body">
-    <form class="layui-form layui-form-pane" action="" id="add">
-        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
-            <div class="layui-tab-content" >
-                <div class="layui-tab-item layui-show">
-                    <input type="hidden" name="id" value="">
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            <span class='x-red'>*</span>所属小区
-                        </label>
-                        <div class="layui-input-block">
-                            <select name="community_id" id="community_id">
+<div id="app">
+    <div class="x-nav">
+            <span class="layui-breadcrumb">
+              <a><cite>首页</cite></a>
+              <a><cite>服务管理</cite></a>
+              <a><cite>{{title}}</cite></a>
+            </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
+    </div>
+    <div class="x-body">
+        <el-form :model="activity" :rules="rules" ref="activityFormRef" label-width="120px" class="demo-ruleForm">
+            <el-form-item label="活动名称" prop="name">
+                <el-input v-model="activity.title"></el-input>
+            </el-form-item>
+            <el-form-item label="活动地点" prop="address">
+                <el-input v-model="activity.address"></el-input>
+            </el-form-item>
+            <el-form-item label="组织者" prop="organizer">
+                <el-input v-model="activity.organizer"></el-input>
+            </el-form-item>
+            <el-form-item label="时间">
+                <el-date-picker
+                        v-model="selectDate"
+                        @change="dateChange"
+                        type="daterange"
+                        align="right"
+                        unlink-panels
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        :picker-options="pickerOptions">
+                </el-date-picker>
+            </el-form-item>
 
-                                <option value="0">---请选择小区---</option>
-                                <option value="1" >东湖小区</option>
-                                <option value="2" >金华万府</option>
-                            </select>
-                        </div>
-                    </div>
+            </el-form-item>
+            <el-form-item label="状态" prop="status">
+                <el-radio-group v-model="activity.status">
+                    <el-radio label="0">有效</el-radio>
+                    <el-radio label="1">无效</el-radio>
+                </el-radio-group>
+            </el-form-item>
 
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            <span class='x-red'>*</span>活动标题
-                        </label>
-                        <div class="layui-input-block">
-                            <input type="text" name="title" autocomplete="off" placeholder="空制在80个汉字，160个字符以内"
-                                   class="layui-input" value="">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            <span class='x-red'>*</span>活动地点
-                        </label>
-                        <div class="layui-input-block">
-                            <input type="text" name="place" autocomplete="off" placeholder="空制在80个汉字，160个字符以内"
-                                   class="layui-input" value="">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            <span class='x-red'>*</span>举办单位
-                        </label>
-                        <div class="layui-input-block">
-                            <input type="text" name="host_unit" autocomplete="off" placeholder="空制在80个汉字，160个字符以内"
-                                   class="layui-input" value="">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            <span class='x-red'>*</span>开始时间
-                        </label>
-
-                        <div class="layui-input-inline">
-                            <input class="layui-input" name="start_time" placeholder="开始时间" id="LAY_demorange_s" value="">
-                        </div>
-
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            <span class='x-red'>*</span>开始时间
-                        </label>
-
-                        <div class="layui-input-inline">
-                            <input class="layui-input" name="end_time" placeholder="开始时间" id="END_demorange_s" value="" >
-                        </div>
-
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            <span class='x-red'>*</span>状态
-                        </label>
-                        <div class="layui-input-block">
-                            <input type="radio" name="status" value="1" title="有效" >
-                            <div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon layui-anim-scaleSpring"></i>
-                                <div>有效</div>
-                            </div>
-                            <input type="radio" name="status" value="0" title="无效" checked="checked">
-                            <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i>
-                                <div>无效</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="link" class="layui-form-label">
-                            <span class="x-red">*</span>活动内容
-                        </label>
-                        <div class="layui-input-inline">
-                            <textarea  id="content" placeholder="" name="content"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="layui-form-item">
-                        <button class="layui-btn" type="button" lay-filter="add" lay-submit="">
-                            保存
-                        </button>
-                    </div>
-
-                    <div style="height:100px;"></div>
-                </div>
-
-
-
-            </div>
-
-        </div>
-    </form>
+            <el-form-item>
+                <el-button type="primary" @click="save()" style="text-align: center">保存</el-button>
+                <el-button @click="clearAll()" style="text-align: center">重置</el-button>
+            </el-form-item>
+        </el-form>
+    </div>
 </div>
 <script src="lib/layui/layui.js" charset="utf-8"></script>
 <script src="js/x-layui.js" charset="utf-8"></script>
+<!--导入Vue依赖包-->
+<script src="/js/vue.js" charset="utf-8"></script>
+<!-- 引入Element组件库 -->
+<script src="/js/index.js"></script>
+<!--导入Axios依赖包-->
+<script src="/js/axios.js" charset="utf-8"></script>
 <script type="text/javascript">
-    //实例化编辑器
-    //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
-    UE.getEditor('content',{initialFrameWidth:750,initialFrameHeight:400,});
-</script>
-<script>
-    layui.use(['laydate','element','layer','form'], function(){
-        $ = layui.jquery;//jquery
-        lement = layui.element();//面包导航
-        layer = layui.layer;//弹出层
-        form = layui.form();
-        laydate = layui.laydate;//日期插件
-        okLoading.close($);
-        form.render();
-        var start = {
-            min: laydate.now()
-            ,max: '2099-06-16 23:59:59'
-            ,istoday: false
-            ,choose: function(datas){
-                //end.min = datas; //开始日选好后，重置结束日的最小日期
-                //end.start = datas //将结束日的初始值设定为开始日
-            }
-        };
-        document.getElementById('LAY_demorange_s').onclick = function(){
-            start.elem = this;
-            laydate(start);
-        };
+    var app = new Vue({
+        el:"#app",
+        data:{
+            title:"添加活动",
+            activity:{thumbnail:"",id:""},
+            fileList:[],
+            selectDate:['',','],
+            rules: {
+                title: [
+                    { required: true, message: '请输入活动名称', trigger: 'blur' },
+                    { max: 50, message: '长度小于50个字符', trigger: 'blur' }
+                ],
+                address: [
+                    { required: true, message: '请输入地址', trigger: 'blur' }
+                ],
+                organizer: [
+                    { required: true, message: '请输入组织者', trigger: 'blur' }
+                ],
+                startTime: [
+                    { required: true, message: '请输入开始时间', trigger: 'blur' }
+                ],
+                endTime: [
+                    { required: true, message: '请输入结束时间', trigger: 'blur' }
+                ],
+                status:[
+                    { required: true, message: '请选择小区状态', trigger: 'change' }
+                ]
+            },
+        },
+        methods:{
 
-        document.getElementById('END_demorange_s').onclick = function(){
-            start.elem = this;
-            laydate(start);
-        };
-        //图片上传接口
-        /*layui.upload({
-          url: './upload.json' //上传接口
-          ,success: function(res){ //上传成功后的回调
-              console.log(res);
-            $('#LAY_demo_upload').attr('src',res.url);
-          }
-        });*/
-
-
-        //监听提交
-        form.on('submit(add)', function(data){
-            var title=$("input[name='title']").val();
-            var place=$("input[name='place']").val();
-            var host_unit=$("input[name='host_unit']").val();
-            var start_time=$("input[name='start_time']").val();
-            var end_time=$("input[name='end_time']").val();
-            var content=$("textarea[name='content']").val();
-            var status=$("input[name='status']:checked").val();
-            var community_id=$('#community_id option:selected') .val();//所属栏目ID
-
-            if(title==""){
-                layer.msg('活动标题不能为空',{icon:5,time:2000});return false;
-            }
-            if(place==""){
-                layer.msg('活动地点不能为空',{icon:5,time:2000});return false;
-            }
-            if(host_unit==""){
-                layer.msg('举办单位不能为空',{icon:5,time:2000});return false;
-            }
-            if(community_id==""){
-                layer.msg('所属小区不能为空',{icon:5,time:2000});return false;
-            }
-            if(start_time==""){
-                layer.msg('活动开始时间不能为空',{icon:5,time:2000});return false;
-            }
-            if(end_time==""){
-                layer.msg('活动截止时间不能为空',{icon:5,time:2000});return false;
-            }
-            if(content==""){
-                layer.msg('活动内容不能为空',{icon:5,time:2000});return false;
-            }
-            if(status==""){
-                layer.msg('状态不能为空',{icon:5,time:2000});return false;
-            }
-            var data=data.field;
-            $.ajax({
-                type:"post",
-                url:"xxxx",
-                data:data,
-                dataType:"json",
-                success:function(data){
-                    if(data.status==1){
-                        layer.msg(data.info, {icon: 6,time:2000},function () {
-                            window.parent.location.reload();
-                            var index = parent.layer.getFrameIndex(window.name);
-                            parent.layer.close(index);
+            findById(){
+                axios.get("/activity/findById?id="+this.activity.id).then((res)=>{
+                    this.activity = res.data.data;
+                    this.fileList.push({url:"http://localhost/estate"+this.activity.thumbnail});
+                });
+            },
+            handleSuccess(response, file, fileList){
+                this.activity.thumbnail=response.data;
+            },
+            handleRemove() {
+                axios.get("/estate/delfile?fileName="+this.activity.thumbnail).then((res)=>{
+                    app.activity.thumbnail="";
+                    if(res.data.flag){
+                        app.fileList=[];
+                        this.$message({
+                            message: '图片删除成功',
+                            type: 'success'
                         });
-                        return false;
-
                     }
-                    else{
-                        layer.msg(data.info,{icon:5,time:2000});return false;
-                    }
+                });
+            },
+            handlePreview(file) {
+                console.log(file);
+            },
+            handleExceed(files, fileList) {
+                this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+            },
+            //文件删除提示
+            beforeRemove(file, fileList) {
+                return this.$confirm(`确定移除 ${ file.name }？`);
+            },
+            //表达重置
+            clearAll() {
+                this.$refs.activityFormRef.resetFields();
+                if(this.fileList.length>0) {
+                    this.handleRemove();
                 }
-
-            });
-
-        });
-
-    })
-</script>
-<!--栏目缩略图上传-->
-<script>
-    function upload()
-    {
-        var formData = new FormData();
-        formData.append('images', $('#previewImg')[0].files[0]);
-        //console.log(formData);
-        layer.msg('图片上传中', {icon: 16});
-        $.ajax({
-            type:"post",
-            processData: false,
-            contentType: false,
-            url:"xxxx",
-            data:formData,
-            success:function(data){
-                if(data.status == 1){
-                    console.log(data.image_name);
-                    layer.closeAll('loading');
-                    //layer.msg(data.info,{icon:1,time:1000});
-                    $("#pimages").attr('src',data.image_name);
-                    $("#avatar").val(data.image_name);
-                    $(".imgs").show();
-                    return false;
+            },
+            save(){
+                var method = "";
+                if(this.activity.id != null){
+                    method = "update"
                 }else{
-                    layer.msg(data.info,{icon:2,time:1000});
+                    method = "add"
                 }
+                axios.post("/activity/"+method,this.activity).then((res)=>{
+                    if(res.data.flag){
+                        this.$message({
+                            message: res.data.message,
+                            type: 'success'
+                        });
+                    }
+                });
+            },
+            imgUrl(){
+                return "http://localhost/estate"+app.activity.thumbnail;
+            },
+            dateFormat(date,format){
+                //默认格式化字符串"YYYY-MM-DD HH:mm:ss"
+                if(format == null || format === ''){
+                    format = "YYYY-MM-DD HH:mm:ss";
+                }
+                return moment(date).format(format);
+            },
+            dateChange(){
+                //没有选择时间区间或者清理时间条件，当前时间区间为空字符串
+
+                if(this.selectDate == null || this.selectDate.length === 0){
+                    this.activity.startTime = '';
+                    this.activity.endTime = '';
+                }else{
+                    //当时间区间不为空，往searchMap中添加条件
+                    if(this.selectDate[0] != null && this.selectDate[0] !== ''){
+                        this.activity.startTime = this.selectDate[0];
+                    }
+                    if(this.selectDate[1] != null && this.selectDate[1] !== ''){
+                        this.activity.endTime = this.selectDate[1];
+                    }
+                }
+
+            },
+            getQueryString(name){
+                let reg = `(^|&)${name}=([^&]*)(&|$)`
+                let r = window.location.search.substr(1).match(reg);
+                if (r != null) return unescape(r[2]); return null;
             }
-        });
-    }
+        },
+        created:function(){
+            layui.use(['element','layer','form'], function(){
+                $ = layui.jquery;//jquery
+                lement = layui.element();//面包导航
+                layer = layui.layer;//弹出层
+                form = layui.form();
+                okLoading.close($);
+            });
+            this.activity.id = this.getQueryString("id");
+            if(this.activity.id != null && this.activity.id !== ''){
+                this.title="修改活动";
+                this.findById();
+            }
+        }
+    });
 </script>
+
 
 </body>
 </html>

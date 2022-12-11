@@ -19,10 +19,6 @@ public class ComplaintImpl implements ComplaintService {
     @Autowired
     private ComplaintDAO complaintMapper;
 
-    public ComplaintImpl(ComplaintDAO complaintMapper) {
-        this.complaintMapper = complaintMapper;
-    }
-
     @Override
     public List<Complaint> findAll() {
         return complaintMapper.selectAll();
@@ -35,8 +31,16 @@ public class ComplaintImpl implements ComplaintService {
         int pageSize = 2;
         if(searchMap != null){
             Example.Criteria criteria = example.createCriteria();
-            if(StringUtil.isNotEmpty(searchMap.get("name"))){
-                criteria.andLike("name", "%"+ searchMap.get("name") +"%");
+
+            if(StringUtil.isNotEmpty(searchMap.get("startTime"))){
+                criteria.andGreaterThanOrEqualTo("createTime",searchMap.get("startTime"));
+            }
+            if(StringUtil.isNotEmpty(searchMap.get("endTime"))){
+                criteria.andLessThanOrEqualTo("createTime",searchMap.get("endTime"));
+            }
+
+            if(StringUtil.isNotEmpty(searchMap.get("title"))){
+                criteria.andLike("ownerName", "%"+ searchMap.get("title") +"%");
             }
             if(StringUtil.isNotEmpty(searchMap.get("pageNum"))){
                 pageNum =  Integer.parseInt(searchMap.get("pageNum"));
